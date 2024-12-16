@@ -1,9 +1,15 @@
-const fs = require("fs");
-const express = require("express");
-const { updateHTML } = require("./populate");
-const { populateCSS, populateConfig } = require("./build");
-const { updateCommand } = require("./update");
+import fs from "fs"; //const fs = require("fs");
+import { fileURLToPath } from "url";
+import path from "path";
+import express from "express"; //const express = require("express");
+import { JSDOM } from "jsdom";
+import { updateHTML } from "./populate.js"; //const { updateHTML } = require("./populate");
+import { populateCSS, populateConfig } from "./build.js"; //const { populateCSS, populateConfig } = require("./build");
+import { updateCommand } from "./update.js"; //const { updateCommand } = require("./update");
+import { getBlog, outDir } from "./utils.js" //const { getBlog, outDir } = require("./utils");
 const app = express();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/views"));
 app.set("views", __dirname + "/views");
@@ -21,12 +27,11 @@ app.use(
 
 const port = 3000;
 
-const jsdom = require("jsdom").JSDOM,
+const jsdom = JSDOM,
   options = {
     resources: "usable"
   };
 global.DOMParser = new jsdom().window.DOMParser;
-const { getBlog, outDir } = require("./utils");
 
 function createBlog(title, subtitle, folder, topImage, images, content) {
   // Checks to make sure this directory actually exists
@@ -144,7 +149,7 @@ function createBlog(title, subtitle, folder, topImage, images, content) {
   );
 }
 
-function uiCommand() {
+export function uiCommand() {
   app.get("/", function(req, res) {
     res.render("index.ejs");
   });
@@ -236,6 +241,6 @@ function uiCommand() {
   );
 }
 
-module.exports = {
-  uiCommand
-};
+//module.exports = {
+//  uiCommand
+//};

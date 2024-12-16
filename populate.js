@@ -1,11 +1,17 @@
-const fs = require("fs");
-const emoji = require("github-emoji");
-const jsdom = require("jsdom").JSDOM,
+import fs from "fs"; //const fs = require("fs");
+import emoji from "github-emoji"; //const emoji = require("github-emoji");
+import { JSDOM } from "jsdom";
+import { fileURLToPath } from "url";
+import path from "path";
+const jsdom = JSDOM,
   options = {
     resources: "usable"
   };
-const { getConfig, outDir } = require("./utils");
-const { getRepos, getUser } = require("./api");
+import { getConfig, outDir } from "./utils.js"; //const { getConfig, outDir } = require("./utils");
+import { getRepos, getUser } from "./api.js"; //const { getRepos, getUser } = require("./api");
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 function convertToEmoji(text) {
   if (text == null) return;
@@ -13,7 +19,7 @@ function convertToEmoji(text) {
   var pattern = /(?<=:\s*).*?(?=\s*:)/gs;
   if (text.match(pattern) != null) {
     var str = text.match(pattern);
-    str = str.filter(function(arr) {
+    str = str.filter(function (arr) {
       return /\S/.test(arr);
     });
     for (i = 0; i < str.length; i++) {
@@ -30,12 +36,12 @@ function convertToEmoji(text) {
   }
 }
 
-module.exports.updateHTML = (username, opts) => {
+export var updateHTML = (username, opts) => {
   const { includeFork, twitter, linkedin, medium, dribbble } = opts;
   //add data to assets/index.html
   jsdom
     .fromFile(`${__dirname}/assets/index.html`, options)
-    .then(function(dom) {
+    .then(function (dom) {
       let window = dom.window,
         document = window.document;
       (async () => {
@@ -58,26 +64,21 @@ module.exports.updateHTML = (username, opts) => {
                         <section>
                             <div class="section_title">${repos[i].name}</div>
                             <div class="about_section">
-                            <span style="display:${
-                              repos[i].description == undefined
-                                ? "none"
-                                : "block"
-                            };">${convertToEmoji(repos[i].description)}</span>
+                            <span style="display:${repos[i].description == undefined
+                ? "none"
+                : "block"
+              };">${convertToEmoji(repos[i].description)}</span>
                             </div>
                             <div class="bottom_section">
-                                <span style="display:${
-                                  repos[i].language == null
-                                    ? "none"
-                                    : "inline-block"
-                                };"><i class="fas fa-code"></i>&nbsp; ${
-              repos[i].language
-            }</span>
-                                <span><i class="fas fa-star"></i>&nbsp; ${
-                                  repos[i].stargazers_count
-                                }</span>
-                                <span><i class="fas fa-code-branch"></i>&nbsp; ${
-                                  repos[i].forks_count
-                                }</span>
+                                <span style="display:${repos[i].language == null
+                ? "none"
+                : "inline-block"
+              };"><i class="fas fa-code"></i>&nbsp; ${repos[i].language
+              }</span>
+                                <span><i class="fas fa-star"></i>&nbsp; ${repos[i].stargazers_count
+              }</span>
+                                <span><i class="fas fa-code-branch"></i>&nbsp; ${repos[i].forks_count
+              }</span>
                             </div>
                         </section>
                         </a>`;
@@ -95,8 +96,7 @@ module.exports.updateHTML = (username, opts) => {
           ).style.background = `url('${user.avatar_url}') center center`;
           document.getElementById(
             "username"
-          ).innerHTML = `<span style="display:${
-            user.name == null || !user.name ? "none" : "block"
+          ).innerHTML = `<span style="display:${user.name == null || !user.name ? "none" : "block"
           };">${user.name}</span><a href="${user.html_url}">@${user.login}</a>`;
           //document.getElementById("github_link").href = `https://github.com/${user.login}`;
           document.getElementById("userbio").innerHTML = convertToEmoji(
@@ -105,38 +105,27 @@ module.exports.updateHTML = (username, opts) => {
           document.getElementById("userbio").style.display =
             user.bio == null || !user.bio ? "none" : "block";
           document.getElementById("about").innerHTML = `
-                <span style="display:${
-                  user.company == null || !user.company ? "none" : "block"
-                };"><i class="fas fa-users"></i> &nbsp; ${user.company}</span>
-                <span style="display:${
-                  user.email == null || !user.email ? "none" : "block"
-                };"><i class="fas fa-envelope"></i> &nbsp; ${user.email}</span>
-                <span style="display:${
-                  user.blog == null || !user.blog ? "none" : "block"
-                };"><i class="fas fa-link"></i> &nbsp; <a href="${user.blog}">${
-            user.blog
-          }</a></span>
-                <span style="display:${
-                  user.location == null || !user.location ? "none" : "block"
-                };"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; ${
-            user.location
-          }</span>
-                <span style="display:${
-                  user.hireable == false || !user.hireable ? "none" : "block"
-                };"><i class="fas fa-user-tie"></i> &nbsp;&nbsp; Available for hire</span>
+                <span style="display:${user.company == null || !user.company ? "none" : "block"
+            };"><i class="fas fa-users"></i> &nbsp; ${user.company}</span>
+                <span style="display:${user.email == null || !user.email ? "none" : "block"
+            };"><i class="fas fa-envelope"></i> &nbsp; ${user.email}</span>
+                <span style="display:${user.blog == null || !user.blog ? "none" : "block"
+            };"><i class="fas fa-link"></i> &nbsp; <a href="${user.blog}">${user.blog
+            }</a></span>
+                <span style="display:${user.location == null || !user.location ? "none" : "block"
+            };"><i class="fas fa-map-marker-alt"></i> &nbsp;&nbsp; ${user.location
+            }</span>
+                <span style="display:${user.hireable == false || !user.hireable ? "none" : "block"
+            };"><i class="fas fa-user-tie"></i> &nbsp;&nbsp; Available for hire</span>
                 <div class="socials">
-                <span style="display:${
-                  twitter == null ? "none !important" : "block"
-                };"><a href="https://www.twitter.com/${twitter}" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
-                <span style="display:${
-                  dribbble == null ? "none !important" : "block"
-                };"><a href="https://www.dribbble.com/${dribbble}" target="_blank" class="socials"><i class="fab fa-dribbble"></i></a></span>
-                <span style="display:${
-                  linkedin == null ? "none !important" : "block"
-                };"><a href="https://www.linkedin.com/in/${linkedin}/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
-                <span style="display:${
-                  medium == null ? "none !important" : "block"
-                };"><a href="https://www.medium.com/@${medium}/" target="_blank" class="socials"><i class="fab fa-medium-m"></i></a></span>
+                <span style="display:${twitter == null ? "none !important" : "block"
+            };"><a href="https://www.twitter.com/${twitter}" target="_blank" class="socials"><i class="fab fa-twitter"></i></a></span>
+                <span style="display:${dribbble == null ? "none !important" : "block"
+            };"><a href="https://www.dribbble.com/${dribbble}" target="_blank" class="socials"><i class="fab fa-dribbble"></i></a></span>
+                <span style="display:${linkedin == null ? "none !important" : "block"
+            };"><a href="https://www.linkedin.com/in/${linkedin}/" target="_blank" class="socials"><i class="fab fa-linkedin-in"></i></a></span>
+                <span style="display:${medium == null ? "none !important" : "block"
+            };"><a href="https://www.medium.com/@${medium}/" target="_blank" class="socials"><i class="fab fa-medium-m"></i></a></span>
                 </div>
                 `;
           //add data to config.json
@@ -148,7 +137,7 @@ module.exports.updateHTML = (username, opts) => {
           await fs.writeFile(
             `${outDir}/config.json`,
             JSON.stringify(data, null, " "),
-            function(err) {
+            function (err) {
               if (err) throw err;
               console.log("Config file updated.");
             }
@@ -156,7 +145,7 @@ module.exports.updateHTML = (username, opts) => {
           await fs.writeFile(
             `${outDir}/index.html`,
             "<!DOCTYPE html>" + window.document.documentElement.outerHTML,
-            function(error) {
+            function (error) {
               if (error) throw error;
               console.log(`Build Complete, Files can be Found @ ${outDir}\n`);
             }
@@ -166,7 +155,7 @@ module.exports.updateHTML = (username, opts) => {
         }
       })();
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log(error);
     });
 };

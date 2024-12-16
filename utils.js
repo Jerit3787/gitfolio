@@ -1,8 +1,13 @@
-const path = require("path");
-const bluebird = require("bluebird");
-const fs = bluebird.promisifyAll(require("fs"));
+import path from "path"; //const path = require("path");
+import bluebird from "bluebird"; //const bluebird = require("bluebird");
+import fs from "fs";
+import { fileURLToPath } from "url";
+const fsPromise = bluebird.promisifyAll(fs);
 
-const outDir = path.resolve("./dist/" || process.env.OUT_DIR);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+export const outDir = path.resolve("./dist/" || process.env.OUT_DIR);
 const configPath = path.join(outDir, "config.json");
 const blogPath = path.join(outDir, "blog.json");
 
@@ -15,25 +20,25 @@ const defaultBlogPath = path.resolve(`${__dirname}/default/blog.json`);
  */
 async function getFileWithDefaults(file, defaultFile) {
   try {
-    await fs.accessAsync(file, fs.constants.F_OK);
+    await fsPromise.accessAsync(file, fsPromise.constants.F_OK);
   } catch (err) {
-    const defaultData = await fs.readFileAsync(defaultFile);
+    const defaultData = await fsPromise.readFileAsync(defaultFile);
     return JSON.parse(defaultData);
   }
-  const data = await fs.readFileAsync(file);
+  const data = await fsPromise.readFileAsync(file);
   return JSON.parse(data);
 }
 
-async function getConfig() {
+export async function getConfig() {
   return getFileWithDefaults(configPath, defaultConfigPath);
 }
 
-async function getBlog() {
+export async function getBlog() {
   return getFileWithDefaults(blogPath, defaultBlogPath);
 }
 
-module.exports = {
-  outDir,
-  getConfig,
-  getBlog
-};
+//module.exports = {
+//  outDir,
+//  getConfig,
+//  getBlog
+//};

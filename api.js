@@ -1,4 +1,4 @@
-const got = require("got");
+import got from "got"; //const got = require("got");
 
 /**
  * The defaults here are the same as the API
@@ -9,7 +9,7 @@ const got = require("got");
  * @param {'created' | 'updated' | 'pushed' | 'full_name' | 'star'} [opts.sort]
  * @param {'desc' | 'asc'} [opts.order]
  */
-async function getRepos(username, opts = {}) {
+export async function getRepos(username, opts = {}) {
   let tempRepos;
   let page = 1;
   let repos = [];
@@ -55,12 +55,12 @@ async function getRepos(username, opts = {}) {
  * @see https://developer.github.com/v3/users/#get-a-single-user
  * @param {string} username
  */
-async function getUser(username) {
+export async function getUser(username) {
   const res = await got(`https://api.github.com/users/${username}`);
   return JSON.parse(res.body);
 }
 
-module.exports = {
-  getRepos,
-  getUser
-};
+//module.exports = {
+//    getRepos,
+//    getUser
+//};

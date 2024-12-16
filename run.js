@@ -1,13 +1,13 @@
-const express = require("express");
-const path = require("path");
+import express from "express"; //const express = require("express");
+import path from "path"; //const path = require("path");
 const outDir = path.resolve("./dist/" || process.env.OUT_DIR);
 const app = express();
 app.use(express.static(`${outDir}`));
 
-function runCommand(program) {
+export function runCommand(program) {
   let port = program.port ? program.port : 3000;
 
-  app.get("/", function(req, res) {
+  app.get("/", function (req, res) {
     res.sendFile("/index.html");
   });
 
@@ -17,6 +17,6 @@ function runCommand(program) {
   );
 }
 
-module.exports = {
-  runCommand
-};
+//module.exports = {
+//  runCommand
+//};
