@@ -8,9 +8,17 @@ import { buildCommand } from "../build.js"; //const { buildCommand } = require("
 import { updateCommand } from "../update.js"; //const { updateCommand } = require("../update");
 import { uiCommand } from "../ui.js"; //const { uiCommand } = require("../ui");
 import { runCommand } from "../run.js"; //const { runCommand } = require("../run");
-import packageJson from "../package.json" assert { type: "json" }; //const { version } = require("../package.json");
+import fs from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-const { version } = packageJson;
+const configPath = join(
+    dirname(fileURLToPath(import.meta.url)),
+    '../package.json'
+);
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+
+const { version } = config;
 
 function collect(val, memo) {
     memo.push(val);
