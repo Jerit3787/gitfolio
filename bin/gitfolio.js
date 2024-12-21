@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 /* Argument parser */
-import program from "commander"; //const program = require("commander");
+import { Command } from "commander"; //const program = require("commander");
+const program = new Command();
 
 process.env.OUT_DIR = process.env.OUT_DIR || process.cwd();
 
