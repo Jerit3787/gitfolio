@@ -22,7 +22,7 @@ function convertToEmoji(text) {
     str = str.filter(function (arr) {
       return /\S/.test(arr);
     });
-    for (i = 0; i < str.length; i++) {
+    for (var i = 0; i < str.length; i++) {
       if (emoji.URLS[str[i]] != undefined) {
         text = text.replace(
           `:${str[i]}:`,
