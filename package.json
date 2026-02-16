@@ -37,7 +37,7 @@
         "bluebird": "^3.5.4",
         "body-parser": "^2.0.0",
         "commander": "^14.0.0",
-        "ejs": "^3.1.10",
+        "ejs": "^4.0.0",
         "express": "^5.0.0",
         "github-emoji": "^1.1.1",
         "got": "^14.4.5",
